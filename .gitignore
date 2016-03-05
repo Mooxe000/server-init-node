@@ -1,0 +1,17 @@
+.DS_Store
+.idea
+npm-debug.log
+*_book
+.tags*
+
+.tmp
+trash
+
+/**/node_modules
+/**/dist
+/**/build
+
+/ssh/keys/*
+!/ssh/keys/.gitkeep
+/ssh/login.sh
+/ssh/config.coffee

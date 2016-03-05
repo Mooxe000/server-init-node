@@ -1,0 +1,25 @@
+{
+  "name": "server-init-node",
+  "version": "0.0.0",
+  "description": "init server use Flightplan",
+  "main": "flightplan.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "fabric",
+    "server init",
+    "flightplan",
+    "devops",
+    "automation"
+  ],
+  "author": "FooTearth <footearth@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "coffee-script": "^1.10.0",
+    "ddeyes": "0.0.1",
+    "flightplan": "^0.6.10",
+    "lodash": "^4.6.1",
+    "shelljs": "^0.6.0"
+  }
+}
