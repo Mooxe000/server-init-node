@@ -1,10 +1,13 @@
 {
   "name": "server-init-node",
   "version": "0.0.0",
-  "description": "init server use Flightplan",
+  "description": "Init server use Flightplan",
   "main": "flightplan.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "fish": "ssh-agent fish",
+    "import_keys": "./ssh/ssh-add.sh",
+    "flightplan": "./reinsreq.sh flightplan"
   },
   "keywords": [
     "fabric",

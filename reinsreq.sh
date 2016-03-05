@@ -24,17 +24,17 @@ helper() {
   echo ''
   echo 'commands:'
   echo ''
-  echo '  global      - install flightplan with global'
-  echo '  reinstall   - reinstall all of require packages.'
+  echo '  flightplan      - install flightplan with global'
+  echo '  install   - reinstall all of require packages.'
 }
 
 command=$1
 
 case $command in
-  'global')
+  'flightplan')
   global
   ;;
-  'reinstall')
+  'install')
   reinstall
   ;;
   'help')

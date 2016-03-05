@@ -1,4 +1,4 @@
-# Reset Server Use Node Flightplan
+# Init Server Use Node Flightplan
 
 ### config file
 
@@ -13,14 +13,20 @@ module.exports =
     key: "#{key_s_name}"
 ```
 
+### run tasks
+
+```
+fly ${task}:${target}
+```
+
 ### flow
 
 ```bash
 # 1. 切换 fish-shell
-ssh-agent fish
+npm run fish
 # 3. 添加 私钥
-.ssh/ssh-add.sh
-./reinsreq.sh global
+npm run import_keys
+npm run flightplan
 ```
 
 ### Keng
@@ -37,7 +43,7 @@ sh: 1: node: Permission denied
 sh: 1: nodejs: Permission denied
 ```
 
-**解决办法：**
+**- 解决办法：**
 
 执行
 
@@ -53,7 +59,7 @@ sh: 1: nodejs: Permission denied
 Could not open a connection to your authentication agent.
 ```
 
-**解决办法：**
+**- 解决办法：**
 
 ```
 ssh-agent fish
