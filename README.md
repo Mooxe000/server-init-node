@@ -1,4 +1,4 @@
-# Init Server Use Node Flightplan
+# Init Server Use Node [Flightplan](https://github.com/pstadler/flightplan)
 
 ### config file
 
