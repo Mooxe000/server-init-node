@@ -6,12 +6,12 @@ set -e
 
 cd $cwd
 
-global() {
+flightplan() {
   cnpm config set unsafe-perm true
   cnpm install -g flightplan
 }
 
-reinstall() {
+install() {
   cnpm install --save-dev \
     coffee-script \
     lodash \
@@ -25,17 +25,17 @@ helper() {
   echo 'commands:'
   echo ''
   echo '  flightplan      - install flightplan with global'
-  echo '  install   - reinstall all of require packages.'
+  echo '  install         - install all of require packages.'
 }
 
 command=$1
 
 case $command in
   'flightplan')
-  global
+  flightplan
   ;;
   'install')
-  reinstall
+  install
   ;;
   'help')
   helper

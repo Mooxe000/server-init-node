@@ -1,9 +1,6 @@
 plan = require 'flightplan'
 server = require '../ssh/config.coffee'
 
-tasks =
-  base: require './base.coffee'
-
 module.exports = ->
 
   plan.target 'docker'
@@ -12,9 +9,14 @@ module.exports = ->
     username: server.docker.user
     agent: process.env.SSH_AUTH_SOCK
 
-  plan.remote 'default', (r) ->
+  plan.local 'hello', (l) ->
+    l.log 'local 2'
+    l.log 'Hello World!!!'
+
+  plan.remote 'hello', (r) ->
     r.log 'remote'
     r.log 'Hello World!!!'
 
-  plan.remote 'base', (r) ->
-    tasks.base r
+  plan.local 'hello', (l) ->
+    l.log 'local 1'
+    l.log 'Hello World!!!'
