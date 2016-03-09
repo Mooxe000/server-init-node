@@ -67,5 +67,4 @@ all = (t) ->
   tasks.fish.fisherman t
   tasks.fish.config t
 
-
 module.exports = all

@@ -6,8 +6,9 @@ echo = console.log
 
 target.all = ->
 
-  # fly base:docker
-  # fly shell:docker
-  # fly shell:docker --username=docker
+  exec 'fly base:docker'
+  exec 'fly shell:docker'
+  exec 'fly shell:docker --username=docker'
+  exec 'fly docker:docker --username=docker'
 
-  echo 'Hello Wolrd!!!'
+  # echo 'Hello Wolrd!!!'

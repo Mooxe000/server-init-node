@@ -1,9 +1,10 @@
 plan = require 'flightplan'
-server = require '../ssh/config.coffee'
+server = require '../ssh/config'
 
 tasks =
-  base: require './base.coffee'
-  shell: require './shell.coffee'
+  base: require './base'
+  shell: require './shell'
+  docker: require './docker'
 
 module.exports = ->
 
@@ -22,3 +23,6 @@ module.exports = ->
 
   plan.remote 'shell', (r) ->
     tasks.shell r
+
+  plan.remote 'docker', (r) ->
+    tasks.docker r
