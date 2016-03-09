@@ -3,6 +3,7 @@ server = require '../ssh/config.coffee'
 
 tasks =
   base: require './base.coffee'
+  shell: require './shell.coffee'
 
 module.exports = ->
 
@@ -18,3 +19,6 @@ module.exports = ->
 
   plan.remote 'base', (r) ->
     tasks.base r
+
+  plan.remote 'shell', (r) ->
+    tasks.shell r

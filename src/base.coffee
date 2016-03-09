@@ -4,8 +4,8 @@ tasks =
 
   env: (t) ->
     t.exec """
-      echo "export DEBIAN_FRONTEND=noninteractive" \
-        >> ~/.bashrc
+      echo "export DEBIAN_FRONTEND=noninteractive" >> ~/.bashrc && \
+      echo "export EDITOR=vim" >> ~/.bashrc
     """
 
   local: (t) ->
@@ -44,72 +44,32 @@ tasks =
       aptitude install -y git-core
     """
 
-  shell:
-
-    tty: (t) ->
+  docker:
+    group: (t) ->
       t.exec """
-        sed -i '/mesg\ n/d' /root/.profile && \
-        echo 'tty -s \&\& mesg n' >> /root/.profile
+        if grep -q wheel /etc/group; \
+        then groupdel wheel; \
+        fi && \
+        groupadd wheel
       """
-
-    bash: (t) ->
+    user: (t) ->
       t.exec """
-        rm -rf ~/.bash_it && \
-        git clone \
-          https://github.com/Bash-it/bash-it.git ~/.bash_it && \
-        bash -lc \"yes | ~/.bash_it/install.sh\"
+        if grep -q docker /etc/shadow; \
+        then userdel -rf docker; \
+        fi && \
+        useradd -m -G wheel -p netserver -s /bin/bash docker
       """
-
-    zsh:
-
-      ins: (t) ->
-        t.exec """
-          aptitude install -y zsh
-        """
-
-      omz: (t) ->
-        t.exec """
-          rm -rf ~/.oh-my-zsh && rm -rf ~/.zshrc && \
-          git clone \
-            https://github.com/robbyrussell/oh-my-zsh.git \
-            ~/.oh-my-zsh && \
-          cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
-        """
-
-    fish:
-
-      ins: (t) ->
-        t.exec """
-          add-apt-repository ppa:fish-shell/nightly-master
-        """
-        t.exec """
-          aptitude install -y fish
-        """
-
-      fisherman: (t) ->
-        t.exec """
-          rm -rf ~/.local/share/fisherman && \
-          git clone \
-            https://github.com/fisherman/fisherman \
-            ~/.local/share/fisherman && \
-          cd ~/.local/share/fisherman && \
-          make && cd ~ && \
-          sed -i 's/^source/./g' ~/.config/fish/config.fish
-        """
-
-      config: (t) ->
-        t.exec """
-          sed -i '/fish_greeting/d' ~/.config/fish/config.fish && \
-          sed -i '/en_US.UTF-8/d' ~/.config/fish/config.fish
-        """
-
-        t.exec """
-          sed -i \"1i \
-        set fish_greeting '' \\n\
-        set -x LC_ALL en_US.UTF-8 \\n\
-        set -x LC_CTYPE en_US.UTF-8 \\n\
-          \" ~/.config/fish/config.fish
-        """
+    authkey: (t) ->
+      t.exec """
+        mkdir -p /home/docker/.ssh && \
+        cp ~/.ssh/authorized_keys /home/docker/.ssh && \
+        chown -R docker /home/docker/.ssh
+      """
+    sudo: (t) ->
+      t.exec """
+      sed -i '/wheel/d' /etc/sudoers && \
+      echo '%wheel  ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers
+      """
 
 all = (t) ->
 
@@ -121,16 +81,16 @@ all = (t) ->
   tasks.update t
   tasks.inspkgs t
 
-  tasks.shell.tty t
-  tasks.shell.bash t
-
-  tasks.shell.zsh.ins t
-  tasks.shell.zsh.omz t
-
-  tasks.shell.fish.ins t
-  tasks.shell.fish.fisherman t
-  tasks.shell.fish.config t
+  tasks.docker.group t
+  tasks.docker.user t
+  tasks.docker.authkey t
+  tasks.docker.sudo t
 
 now = (t) ->
+
+  tasks.docker.group t
+  tasks.docker.user t
+  tasks.docker.authkey t
+  tasks.docker.sudo t
 
 module.exports = all
