@@ -5,9 +5,14 @@
   "main": "flightplan.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf ./shelljs*",
+    "edit": "atom-beta ./ssh/config.coffee; atom-beta ./ssh/login.sh",
     "fish": "ssh-agent fish",
     "import_keys": "./ssh/ssh-add.sh",
-    "flightplan": "./reinsreq.sh flightplan"
+    "flightplan": "./reinsreq.sh flightplan",
+    "start": "./index.coffee",
+    "startDao": "export dao=true && ./index.coffee",
+    "aws": "export sudo=true && npm start"
   },
   "keywords": [
     "fabric",

@@ -1,72 +1,75 @@
-plan = require 'flightplan'
+echo = console.log
+{ executivor } = require './common.coffee'
 
 tasks =
 
   env: (t) ->
     t.exec """
+      sed -i '/DEBIAN_FRONTEND/d' ~/.bashrc && \
       echo "export DEBIAN_FRONTEND=noninteractive" >> ~/.bashrc && \
+      sed -i '/EDITOR/d' ~/.bashrc && \
       echo "export EDITOR=vim" >> ~/.bashrc
     """
 
   local: (t) ->
-    t.exec """
+    executivor t, """
       locale-gen en_US.UTF-8 && \
       /usr/sbin/update-locale LANG=en_US.UTF-8
     """
 
   aptkey: (t) ->
-    t.exec """
+    executivor t, """
       apt-key adv --recv-keys \
       --keyserver keyserver.ubuntu.com \
       40976EAF437D05B5 3B4FE6ACC0B21F32
     """
 
   aptitude: (t) ->
-    t.exec 'apt-get install -y aptitude'
+    executivor t, 'apt-get install -y aptitude'
 
   update: (t) ->
-    t.exec """
+    executivor t, """
       aptitude update && \
       1 | aptitude -y upgrade && \
       apt-get -y autoremove
     """
 
   inspkgs: (t) ->
-    t.exec """
+    executivor t, """
       aptitude install -y \
-        curl axel htop make \
-        software-properties-common
+        software-properties-common \
+        make curl axel htop nload
     """
-    t.exec """
+    executivor t, """
       add-apt-repository ppa:git-core/ppa
     """
-    t.exec """
+    executivor t, """
       aptitude install -y git-core
     """
 
   docker:
     group: (t) ->
-      t.exec """
+      executivor t, """
         if grep -q wheel /etc/group; \
         then groupdel wheel; \
         fi && \
         groupadd wheel
       """
     user: (t) ->
-      t.exec """
+      executivor t, """
         if grep -q docker /etc/shadow; \
         then userdel -rf docker; \
         fi && \
         useradd -m -G wheel -p netserver -s /bin/bash docker
       """
     authkey: (t) ->
-      t.exec """
+      executivor t, """
         mkdir -p /home/docker/.ssh && \
         cp ~/.ssh/authorized_keys /home/docker/.ssh && \
         chown -R docker /home/docker/.ssh
       """
     sudo: (t) ->
-      t.exec """
+      executivor t, """
       sed -i '/wheel/d' /etc/sudoers && \
       echo '%wheel  ALL=(ALL:ALL) NOPASSWD: ALL' >> /etc/sudoers
       """
@@ -88,9 +91,6 @@ all = (t) ->
 
 now = (t) ->
 
-  tasks.docker.group t
-  tasks.docker.user t
-  tasks.docker.authkey t
   tasks.docker.sudo t
 
 module.exports = all
