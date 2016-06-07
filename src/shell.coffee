@@ -30,29 +30,45 @@ tasks =
     ins: (t) ->
       t.exec """
         sudo add-apt-repository ppa:fish-shell/nightly-master && \
-        sudo aptitude install -y fish
+        sudo aptitude install -y fish && \
+        sudo aptitude update && \
+        1 | sudo aptitude -y upgrade && \
+        sudo apt-get -y autoremove
       """
 
     fisherman: (t) ->
+      # git clone \
+      #   https://github.com/fisherman/fisherman \
+      #   ~/.local/share/fisherman && \
+      # cd ~/.local/share/fisherman && \
+      # make && cd ~ && \
+      # sed -i 's/^source/./g' ~/.config/fish/config.fish
       t.exec """
         rm -rf ~/.local/share/fisherman && \
-        git clone \
-          https://github.com/fisherman/fisherman \
-          ~/.local/share/fisherman && \
-        cd ~/.local/share/fisherman && \
-        make && cd ~ && \
-        sed -i 's/^source/./g' ~/.config/fish/config.fish
+        curl -Lo ~/.config/fish/functions/fisher.fish \
+          --create-dirs git.io/fisherman
       """
 
     config: (t) ->
+      # t.exec """
+      #   sed -i '/fish_greeting/d' ~/.config/fish/config.fish && \
+      #   sed -i '/en_US.UTF-8/d' ~/.config/fish/config.fish && \
+      #   sed -i \"1i \
+      # set fish_greeting '' \\n\
+      # set -x LC_ALL en_US.UTF-8 \\n\
+      # set -x LC_CTYPE en_US.UTF-8 \\n\
+      #   \" ~/.config/fish/config.fish
+      # """
       t.exec """
-        sed -i '/fish_greeting/d' ~/.config/fish/config.fish && \
-        sed -i '/en_US.UTF-8/d' ~/.config/fish/config.fish && \
-        sed -i \"1i \
-      set fish_greeting '' \\n\
-      set -x LC_ALL en_US.UTF-8 \\n\
-      set -x LC_CTYPE en_US.UTF-8 \\n\
-        \" ~/.config/fish/config.fish
+        echo "set fish_greeting ''" \
+          > ~/.config/fish/config.fish && \
+        echo "set -x LC_ALL en_US.UTF-8" \
+          >> ~/.config/fish/config.fish && \
+        echo "set -x LC_CTYPE en_US.UTF-8" \
+          >> ~/.config/fish/config.fish
+      """
+      t.exec """
+        fish -lc 'fisher omf/theme-robbyrussell'
       """
 
 all = (t) ->
